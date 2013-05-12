@@ -8,7 +8,7 @@ Locations of important files:
 
 * ``project_name/`` Django project and apps
 * ``docs/`` - project documentation (Sphinx)
-* ``requirements/ - project dependencies
+* ``requirements/`` - project dependencies
 * ``static/`` - static media
 * ``templates/`` - project HTML templates
 
@@ -36,5 +36,5 @@ You can avoid having to pass the ``--settings=medicare.settings.dev`` argument t
 Data Sources
 -------------
 
-* `One hospital charges $8,000 -- another, $38,000 <http://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Medicare-Provider-Charge-Data/index.html>`_
+* `One hospital charges $8,000 -- another, $38,000 <http://www.washingtonpost.com/blogs/wonkblog/wp/2013/05/08/one-hospital-charges-8000-another-38000/>`_
 * `Medicare Provider Charge Data <http://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Medicare-Provider-Charge-Data/index.html>`_
