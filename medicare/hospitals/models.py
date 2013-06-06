@@ -1,4 +1,7 @@
-from django.db import models
+from operator import itemgetter
+
+from django.core.urlresolvers import reverse
+from django.db import connection, models
 
 from django_localflavor_us import models as us_models
 
@@ -36,6 +39,16 @@ class Hospital(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("hospitals:detail", args=None, kwargs={'pk': self.id})
+
+    def procedures(self):
+        """
+        Annotates the queryset of hospitals procedures with the national average for each
+        procedure.
+        """
+        return Procedure.objects.filter(hospitalprocedure__hospital_id=self.id)
+
 
 class Procedure(models.Model):
     """
@@ -43,8 +56,37 @@ class Procedure(models.Model):
     """
     name = models.CharField(db_index=True, max_length=255)
 
+    objects = managers.ProcedureManager()
+
     def __unicode__(self):
         return self.name
+
+    def averages(self, state=None):
+        """
+        Provide the national or state-level averages for the given procedure for:
+
+            1. Number of discharges
+            2. Average reimbursement
+            3. Average charge by hospital
+
+        """
+        if state:
+            queryset = self.hospitalprocedure_set.filter(hospital__state=state)
+        else:
+            queryset = self.hospitalprocedure_set
+        fields = ('avg_covered_charges', 'avg_total_payments', 'discharges')
+        aggregates = (models.Avg(f) for f in fields)
+        result = queryset.aggregate(*aggregates)
+        return dict((f, result[f + "__avg"]) for f in fields)
+
+    def get_absolute_url(self):
+        return reverse("procedures:detail", args=None, kwargs={'pk': self.id})
+
+    def range(self):
+        return self.hospitalprocedure_set.aggregate(
+            min=models.Max("avg_total_payments"),
+            max=models.Min("avg_total_payments")
+        )
 
 
 class HospitalProcedure(models.Model):
@@ -54,11 +96,24 @@ class HospitalProcedure(models.Model):
     hospital = models.ForeignKey("Hospital")
     procedure = models.ForeignKey("Procedure")
     discharges = models.IntegerField()
-    avg_covered_charges = models.DecimalField(decimal_places=3, max_digits=10)
-    avg_total_payments = models.DecimalField(decimal_places=3, max_digits=10)
+    avg_covered_charges = models.DecimalField(
+        decimal_places=3,
+        help_text=(
+            "The average amount for which the hopistal is reimbursed "
+            "by Medicare for this procedure."
+        ),
+        max_digits=10
+    )
+    avg_total_payments = models.DecimalField(
+        decimal_places=3,
+        help_text="The average price this hospital charges for this procedure",
+        max_digits=10
+    )
+
+    objects = managers.HospitalProcedureManager()
 
     class Meta:
         unique_together = ("hospital", "procedure")
 
     def __unicode__(self):
-        return u"{0} - {1}".format(self.hospital, self.procedure)
+        return unicode(self.procedure)

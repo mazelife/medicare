@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Hospitals{% endblock %}
+
+{% block content %}
+<h1>Hospitals</h1>
+
+<div class="filtered-list row">
+    <form class="span4" action="{% url 'hospitals:list' %}">
+        {{ filterset.form.as_p }}
+        <button type="reset" class="btn">Reset the form</button>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <div class="span7">
+        {% if is_paginated %}
+        <h2>Showing {{ page_obj.start_index}} &ndash; {{ page_obj.end_index}} of {{ paginator.count }} result{{ paginator.count|pluralize }}.</h2>
+        {% else %}
+        <h2>Showing {{ paginator.count }} result{{ paginator.count|pluralize }}.</h2>
+        {% endif %}
+        <ul>
+        {% for hospital in hospitals %}
+            <li><a href="{{ hospital.get_absolute_url }}">{{ hospital|title }}</a> ({{ hospital.city|title }}, {{ hospital.get_state_display }})</li>
+        {% endfor %}
+        </ul>
+        {% include "components/pagination.html" %}
+</div>
+
+
+
+{% endblock %}

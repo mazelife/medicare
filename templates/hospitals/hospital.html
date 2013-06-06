@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% load averages humanize %}
+
+{% block title %}{{ hospital|title }}{% endblock %}
+
+{% block content %}
+<h1>{{ hospital|title }}</h1>
+<address>
+  <strong>{{ hospital|title }}</strong><br>
+  {{ hospital.address|title }}<br>
+  {{ hospital.city|title }}, {{ hospital.get_state_display }} {{ hospital.zipcode }}
+</address>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Procedure</th>
+            <th>Discharges</th>
+            <th>Average covered charges</th>
+            <th>Average total payments</th>
+            <th>National average payment</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for procedure in hospital.procedures %}\
+        <tr>
+            <td>{{ procedure }}</td>
+            <td>{{ procedure.discharges }}</td>
+            <td>${{ procedure.avg_covered_charges|floatformat:2|intcomma }}</td>
+            <td>
+                <span {% if procedure.avg_total_payments > procedure.avg %}class="high">&uarr;</span>{% else %}class="low">&darr;{% endif%}</span>
+                ${{ procedure.avg_total_payments|floatformat:2|intcomma }}
+            </td>
+            <td>${{ averages.avg_total_payments|floatformat:2|intcomma }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

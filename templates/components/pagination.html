@@ -1,0 +1,36 @@
+{% if is_paginated %}{% load querystring %}
+<div class="pagination">
+    <ul>
+        {% if page_obj.has_previous %}
+        <li><a href="?{% pageless_querystring %}page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% if page_obj.show_first %}
+        <li><a href="?{% pageless_querystring %}page=1">1</a></li>
+        <li class="disabled"><a href="#">&hellip;</a></li>
+        {% endif %}
+
+        {% for number in page_obj.page_range %}
+            {% if number == page_obj.number %}
+            <li class="active"><a href="#">{{ page_obj.number }}
+            {% else %}
+            <li><a href="?{% pageless_querystring %}page={{ number }}">{{ number }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.show_last %}
+        <li class="disabled"><a href="#">&hellip;</a></li>
+        <li><a href="?{% pageless_querystring %}page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+        {% endif %}
+
+
+        {% if page_obj.has_next %}
+        <li><a href="?{% pageless_querystring %}page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}

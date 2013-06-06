@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Procedures{% endblock %}
+
+{% block content %}
+<h1>Procedures</h1>
+<ul>{% for procedure in procedures %}
+    <li><a href="{{ procedure.get_absolute_url }}">{{ procedure }}</a></li>
+{% endfor %}</ul>
+{% endblock %}

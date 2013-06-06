@@ -1,0 +1,13 @@
+
+@font-face {
+    font-family: 'Iconic';
+    src: url('../fonts/iconic_fill.eot');
+    src: url('../fonts/iconic_fill.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/iconic_fill.woff') format('woff'),
+         url('../fonts/iconic_fill.ttf') format('truetype'),
+         url('../fonts/iconic_fill.svg#OpenSansExtraboldItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+

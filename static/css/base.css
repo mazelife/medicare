@@ -1,0 +1,31 @@
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+.content {
+    padding-left: 20px;
+}
+
+
+.tt {
+    border-bottom: 1px dotted silver;
+}
+
+.tt-indicator:after {
+    color: silver;
+    content: '\e004';
+    font-family: "Iconic";
+    font-size: 19px;
+    padding: 0 4px;
+}
+
+.filtered-list ul {
+    list-style-type: none;
+}
+
+table .high,
+table .low {
+    color: #bd362f;
+    font-family: "Iconic";
+}
+table .low { color: #51a351; }

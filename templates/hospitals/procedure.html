@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% load humanize %}
+
+{% block title %}{{ procedure }}{% endblock %}
+
+{% block content %}
+    <h1>{{ procedure|title }}</h1>
+    {% with averages=procedure.averages %}
+    <dl>
+        <dt data-ot="The national average number of discharges for this procedure.">Average discharges</dt>
+        <dd>{{ averages.discharges|floatformat:0 }}</dd>
+        <dt data-ot="The average amount the hospital charges.">Average total payments</dt>
+        <dd>${{ averages.avg_total_payments|floatformat:2|intcomma }}</dd>
+        <dt data-ot="The average amount a hospital is reimbursed by Medicare.">Average covered charges</dt>
+        <dd>${{ averages.avg_covered_charges|floatformat:2|intcomma }}</dd>
+
+    </dl>
+    {% endwith %}
+{% endblock %}
